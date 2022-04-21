@@ -11,19 +11,26 @@ import Contact from "../components/Contact";
 const Chat = () => {
     const [contacts, setContacts] = useState([]);
     const [currentUser, setCurrentUser] = useState(undefined);
-    console.log('contacts: ', contacts);
 
     const navigate = useNavigate();
-    useEffect(() => {
-        async function setUser() {
+    // useEffect(() => {
+    //     async function setUser() {
+    //         if(!localStorage.getItem("chat-app-user")){
+    //             navigate('/login');
+    //         } else {
+    //             setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
+    //         }
+    //     }
+    //     setUser();
+    // },[]);
+    useEffect(async () => {
             if(!localStorage.getItem("chat-app-user")){
                 navigate('/login');
             } else {
                 setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
             }
-        }
-        setUser();
     },[]);
+
     useEffect(() => {
         async function setAvatar() {
 
