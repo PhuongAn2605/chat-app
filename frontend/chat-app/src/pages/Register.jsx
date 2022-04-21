@@ -61,20 +61,6 @@ export default function Register() {
     return true;
   };
 
-<<<<<<< HEAD
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if(handleValidation()){
-            const { password, username, email } = values;
-            const { data } = await axios.post(registerRoute, {
-                username,
-                email,
-                password
-            });
-            if(data.status === false) {
-                toast.error(data.msg, toastOptions);
-            }
-=======
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
@@ -84,7 +70,6 @@ export default function Register() {
         email,
         password,
       });
->>>>>>> 946abc611bb73f6e64b33cfb2341298d8cff2f27
 
       if (data.status === false) {
         toast.error(data.msg, toastOptions);

@@ -10,43 +10,31 @@ import Contact from "../components/Contact";
 
 const Chat = () => {
     const [contacts, setContacts] = useState([]);
-    const [currentUser, setCurrentUser] = useState(undefined);
+    const [currentUser, setCurrentUser] = useState({});
 
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     async function setUser() {
-    //         if(!localStorage.getItem("chat-app-user")){
-    //             navigate('/login');
-    //         } else {
-    //             setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
-    //         }
-    //     }
-    //     setUser();
-    // },[]);
-    useEffect(async () => {
-            if(!localStorage.getItem("chat-app-user")){
-                navigate('/login');
-            } else {
-                setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
-            }
-    },[]);
 
-    useEffect(() => {
-        async function setAvatar() {
-
-            if(currentUser) {
-                if(currentUser.isAvatarImageSet) {
-                    const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-                    setContacts(data.data);
-                }else {
-                    navigate("/setAvatar");
-                }
-            }
+    // useEffect(async () => {
+        if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+          navigate("/login");
+        } else {
+          setCurrentUser(
+            JSON.parse(
+              localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+            )
+          );
         }
-        setAvatar();
-    }, [currentUser]);
+
+    // useEffect(async () => {
+    // if (currentUser) {
+    //     const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+    //     setContacts(data.data);
+    // }
+    //   }, [currentUser]);
+
     return <Container>
         <div className="container">
+            {console.log('3')}
             <Contact contacts={contacts} currentUser={currentUser} />
         </div>
     </Container>

@@ -8,13 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/APIRoutes";
 export default function SetAvatar() {
-<<<<<<< HEAD
-    const api = "https://api.multiavatar.com/4645646";
-    const navigate = useNavigate();
-    const [avatars, setAvatars] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [selectedAvatar, setSelectedAvatar] = useState(undefined);
-=======
   const api = `https://api.multiavatar.com/4645646`;
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
@@ -27,9 +20,9 @@ export default function SetAvatar() {
     draggable: true,
     theme: "dark",
   };
->>>>>>> 946abc611bb73f6e64b33cfb2341298d8cff2f27
 
   useEffect(async () => {
+      console.log('1');
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
@@ -61,6 +54,7 @@ export default function SetAvatar() {
   };
 
   useEffect(async () => {
+    console.log('2');
     const data = [];
     for (let i = 0; i < 4; i++) {
       const image = await axios.get(

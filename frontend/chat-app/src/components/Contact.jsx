@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.png"
 
-const Contact = ({ contacts, currentUser }) => {
+const Contact = (props) => {
+  const { contacts, currentUser } = props;
+  // console.log('contacts 2: ', contacts);
+  // console.log('currentUser 2: ', currentUser);
+  console.log('props: ', props);
+
     const [currentUserName, setCurrentUserName] = useState(undefined);
     const [currentUserImage, setCurrentUserImage] = useState(undefined);
     const [currentSelected, setCurrentSelected] = useState(undefined);
