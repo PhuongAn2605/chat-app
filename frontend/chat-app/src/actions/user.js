@@ -1,4 +1,4 @@
-import userTypes from "../constants/user";
+import * as userTypes from "../constants/user";
 
 export const fetchRegisterStart = ( username, email, password ) => ({
     type: userTypes.REGISTER_START,
@@ -23,11 +23,10 @@ export const fetchRegisterFailed = (error) => ({
     }
 });
 
-export const fetchLoginStart = ( username, email, password ) => ({
+export const fetchLoginStart = ( username, password ) => ({
     type: userTypes.LOGIN_START,
     payload: {
         username,
-        email,
         password
     }
 });

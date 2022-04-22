@@ -1,6 +1,8 @@
-import { all, call, fork } from 'redux-saga/effects';
-import { watchUserFetch } from './user';
+import { all, call } from '@redux-saga/core/effects';
+import { userSaga } from './user';
 
 export default function* rootSaga() {
-    yield fork(watchUserFetch)
+    yield all([
+        call(userSaga)
+    ])
 }

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Logo from "../assets/logo.png"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { allUsersRoute, registerRoute } from "../utils/APIRoutes";
 import Contact from "../components/Contact";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
     const [contacts, setContacts] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
 
     const navigate = useNavigate();
+    // const user = useSelector(state => state.user )
 
     // useEffect(async () => {
         if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {

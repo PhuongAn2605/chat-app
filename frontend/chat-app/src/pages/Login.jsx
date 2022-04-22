@@ -5,9 +5,14 @@ import axios from "axios";
 import Logo from "../assets/logo.png";
 import { toast, ToastContainer } from "react-toastify";
 import { loginRoute } from "../utils/APIRoutes";
+import { useDispatch } from "react-redux";
+import { fetchLoginStart } from "../actions/user";
+import { useSelector } from "react-redux";
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { error } = useSelector(state => state.user)
 
     const [values, setValues] = useState({
         username: "",
@@ -33,21 +38,11 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (handleValidation()) {
-            const { password, confirmPassword, username, email } = values;
-            const { data } = await axios.post(loginRoute, {
-                username,
-                email,
-                password
-            });
-            if (data.status === false) {
-                toast.error(data.msg, toastOptions);
-            }
-
-            if (data.status === true) {
-                toast.success('Register successfully!', toastOptions);
-                localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(data.user));
-                navigate("/");
-            }
+            const { password, username } = values;
+            dispatch(fetchLoginStart(username, password));
+        }
+        if(!error) {
+            navigate('/');
         }
     }
     const handleValidation = () => {
