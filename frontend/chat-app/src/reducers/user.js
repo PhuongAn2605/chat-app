@@ -15,10 +15,9 @@ const userReducer = (state = initialState, action ) => {
                 user
             }
         case userConstants.REGISTER_FAILED:
-            const { error } = action.payload;
             return {
                 ...state,
-                error
+                error: action.payload
             }
         case userConstants.LOGIN_SUCCESS:
             const { userLogin } = action.payload;
@@ -27,27 +26,37 @@ const userReducer = (state = initialState, action ) => {
                 user: userLogin
             }
         case userConstants.LOGIN_FAILED:
-            const { e } = action.payload;
             return {
                 ...state,
-                error: e
+                error: action.payload
             }
-            case userConstants.FETCH_ALL_USERS_SUCCESS:
-            const { users } = action.payload;
+        case userConstants.FETCH_ALL_USERS_SUCCESS:
             return {
                 ...state,
-                user: users
+                userList: action.payload.users
             }
         case userConstants.FETCH_ALL_USERS_FAILED:
-            const { err } = action.payload;
             return {
                 ...state,
-                error: err
+                error: action.payload
+            }
+
+        case userConstants.FETCH_SET_AVATAR_SUCCESS:
+          console.log('payload: ', action.payload)
+          const { userData } = action.payload;
+            localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(userData))
+            return {
+                ...state,
+                user: userData
+            }
+        case userConstants.FETCH_SET_AVATAR_FAILED:
+            return {
+                ...state,
+                error: action.payload
             }
         default:
             return state;
     }
-
 }
 
 export default userReducer;

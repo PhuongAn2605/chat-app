@@ -45,13 +45,8 @@ export const fetchLoginFailed = (error) => ({
     }
 });
 
-export const fetchAllUsersStart = ( username, email, password ) => ({
+export const fetchAllUsersStart = () => ({
     type: userTypes.FETCH_ALL_USERS_START,
-    payload: {
-        username,
-        email,
-        password
-    }
 });
 
 export const fetchAllUsersSuccess = (data) => ({
@@ -66,4 +61,26 @@ export const fetchAllUsersFailed = (error) => ({
     payload: {
         error
     }
+});
+
+export const fetchSetAvatarStart = ({userId, image}) => ({
+  type: userTypes.FETCH_SET_AVATAR_START,
+  payload: {
+    userId,
+    image
+  }
+});
+
+export const fetchSetAvatarSuccess = (data) => ({
+  type: userTypes.FETCH_SET_AVATAR_SUCCESS,
+  payload: {
+      data: data
+  }
+});
+
+export const fetchSetAvatarFailed = (error) => ({
+  type: userTypes.FETCH_SET_AVATAR_FAILED,
+  payload: {
+      error
+  }
 });

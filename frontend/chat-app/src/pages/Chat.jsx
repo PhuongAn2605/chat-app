@@ -1,40 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { allUsersRoute, registerRoute } from "../utils/APIRoutes";
 import Contact from "../components/Contact";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUsersStart } from "../actions/user";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Chat = () => {
     const [contacts, setContacts] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const user = useSelector(state => state.user )
 
-    // useEffect(async () => {
+    useEffect(() => {
+      dispatch(fetchAllUsersStart());
+    }, []);
+
+    const { userList } = useSelector(state => state.user );
+
+    useEffect(() => {
+      setContacts(userList);
+    },[userList]);
+
+    useEffect(async () => {
         if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
           navigate("/login");
         } else {
-          setCurrentUser(
-            JSON.parse(
-              localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-            )
-          );
+          setCurrentUser(JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)));
         }
+      }, []);
 
-    // useEffect(async () => {
-    // if (currentUser) {
-    //     const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-    //     setContacts(data.data);
-    // }
-    //   }, [currentUser]);
+      useEffect(async () => {
+        if(currentUser) {
+          if(currentUser.isAvatarImageSet) {
+            dispatch(fetchAllUsersStart());
+          } else {
+            navigate('/setAvatar');
+          }
+        }
+      });
 
     return <Container>
         <div className="container">
-            {console.log('3')}
             <Contact contacts={contacts} currentUser={currentUser} />
         </div>
     </Container>

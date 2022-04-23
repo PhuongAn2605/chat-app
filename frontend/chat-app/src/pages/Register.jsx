@@ -9,18 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
 import { fetchRegisterStart } from "../actions/user";
 import { useSelector } from "react-redux";
+import { toastOptions } from "../utils/toast";
 
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { error } = useSelector(state => state.user);
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
+
   const [values, setValues] = useState({
     username: "",
     email: "",

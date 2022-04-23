@@ -8,6 +8,8 @@ import { loginRoute } from "../utils/APIRoutes";
 import { useDispatch } from "react-redux";
 import { fetchLoginStart } from "../actions/user";
 import { useSelector } from "react-redux";
+import { toastOptions } from "../utils/toast";
+import isEmpty from "is-empty";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -21,14 +23,6 @@ const Login = () => {
         confirmPassword: ""
     });
 
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 1000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
-
     useEffect(() => {
         if(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)){
             navigate('/');
@@ -40,10 +34,14 @@ const Login = () => {
         if (handleValidation()) {
             const { password, username } = values;
             dispatch(fetchLoginStart(username, password));
+
         }
-        if(!error) {
-            navigate('/');
-        }
+        console.log('navigate: ', navigate)
+        navigate('/');
+
+        // if(!isEmpty(error)) {
+        //     navigate('/');
+        // }
     }
     const handleValidation = () => {
         const { password, username } = values;

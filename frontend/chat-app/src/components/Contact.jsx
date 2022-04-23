@@ -2,23 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.png"
 
-const Contact = (props) => {
-  const { contacts, currentUser } = props;
-  // console.log('contacts 2: ', contacts);
-  // console.log('currentUser 2: ', currentUser);
-  console.log('props: ', props);
+const Contact = ({ contacts, currentUser }) => {
+  console.log('currentUser: ', currentUser);
+  console.log('contacts: ', contacts)
 
-    const [currentUserName, setCurrentUserName] = useState(undefined);
-    const [currentUserImage, setCurrentUserImage] = useState(undefined);
+    const [currentUserName, setCurrentUserName] = useState(currentUser.username && currentUser.username);
+    const [currentUserImage, setCurrentUserImage] = useState(currentUser.avatarImage && currentUser.avatarImage);
     const [currentSelected, setCurrentSelected] = useState(undefined);
-
-
-    useEffect(() => {
-        if(currentUser) {
-            setCurrentUserName(currentUser.username);
-            setCurrentUserImage(currentUser.avatarImage);
-        }
-    }, [currentUser]);
 
     const changeCurrentTask = (index, contact) => {
 

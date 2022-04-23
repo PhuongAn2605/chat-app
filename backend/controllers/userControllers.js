@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const { is } = require("express/lib/request");
+const isEmpty = require('is-Empty');
 
 module.exports.register = async (req, res, next) => {
     try{ 
@@ -47,17 +47,25 @@ module.exports.login = async (req, res, next) => {
 }
 
 module.exports.setAvatar = async (req, res, next) => {
+  console.log(req.body)
     try{ 
-        const userId = req.params.id;
+        const userId = req.body.userId;
         const avatarImage = req.body.image;
+        console.log('userId: ', userId)
         const userData = await User.findByIdAndUpdate(userId, {
             isAvatarImageSet: true,
             avatarImage,
         });
-        return res.json({
-            isSet: userData.isAvatarImageSet,
-            image: userData.avatarImage
-        })
+        console.log('userData: ', userData)
+        if(isEmpty(userData)) {
+          return res.json({ msg: "Something went wrong", status: false })
+        }
+        return res.json(userData);
+        // return res.json({
+        //     isSet: userData.isAvatarImageSet,
+        //     image: userData.avatarImage,
+        //     status: true
+        // })
     }catch(e) {
         next(e)
     }
@@ -67,8 +75,11 @@ module.exports.setAvatar = async (req, res, next) => {
 module.exports.getAllUsers = async (req, res, next) => {
     try{ 
         // const users = await User.find({_id: { $ne: req.params.id }}).select(["email", "username","avatarImage","_id"]);
-        const users = await User.find({})
-        return res.json(users);
+        const users = await User.find({});
+        if(isEmpty(users)) {
+          return res.json({ msg: "Something went wrong!", status: false })
+        }
+        return res.json({status: true, users});
     }catch(e) {
         next(e)
     }
