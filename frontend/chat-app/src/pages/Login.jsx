@@ -5,51 +5,49 @@ import axios from "axios";
 import Logo from "../assets/logo.png";
 import { toast, ToastContainer } from "react-toastify";
 import { loginRoute } from "../utils/APIRoutes";
+import { useDispatch } from "react-redux";
+import { fetchLoginStart, naviagteToChat } from "../actions/user";
+import { useSelector } from "react-redux";
+import { toastOptions } from "../utils/toast";
+import isEmpty from "is-empty";
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { error, user } = useSelector(state => state.user);
 
     const [values, setValues] = useState({
         username: "",
-        email: "",
         password: "",
-        confirmPassword: ""
     });
 
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 1000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
-
     useEffect(() => {
-        if(localStorage.getItem('chat-app-user')){
+        if(!isEmpty(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))){
+          console.log('test 1');
             navigate('/');
         }
     }, []);
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (handleValidation()) {
-            const { password, confirmPassword, username, email } = values;
-            const { data } = await axios.post(loginRoute, {
-                username,
-                email,
-                password
-            });
-            if (data.status === false) {
-                toast.error(data.msg, toastOptions);
-            }
+      handleValidation();
 
-            if (data.status === true) {
-                toast.success('Register successfully!', toastOptions);
-                localStorage.setItem('chat-app-user', JSON.stringify(data.user));
-                navigate("/");
-            }
+        event.preventDefault();
+
+        if (handleValidation()) {
+            const { password, username } = values;
+            dispatch(fetchLoginStart(username, password));
+            navigate('/');
+
         }
+        // dispatch(naviagteToChat(navigate));
+  
     }
+    useEffect(() => {
+      if(!isEmpty(user)){
+        navigate('/');
+      }
+    }, [user, navigate])
+
     const handleValidation = () => {
         const { password, username } = values;
         if (password === "") {
@@ -64,7 +62,6 @@ const Login = () => {
     }
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
-        handleValidation();
     }
     return <>
         <FormContainerLogin>

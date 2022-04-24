@@ -6,13 +6,12 @@ import Register from "./pages/Register";
 import SetAvatar from "./pages/SetAvatar";
 
 export default function App() {
-  return <BrowserRouter>
+  return <div className="App">
     <Routes>
-      <Route path="/register" exact element={<Register />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/setAvatar" element={<SetAvatar />} />
       <Route path="/" element={<Chat />} />
-
     </Routes>
-  </BrowserRouter>
+  </div>
 }
