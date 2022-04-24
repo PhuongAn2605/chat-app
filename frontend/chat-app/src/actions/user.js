@@ -45,14 +45,35 @@ export const fetchLoginFailed = (error) => ({
     }
 });
 
-export const fetchAllUsersStart = () => ({
-    type: userTypes.FETCH_ALL_USERS_START,
+export const fetchLogoutStart = ( userId ) => ({
+  type: userTypes.LOGOUT_START,
+  payload: userId
 });
 
-export const fetchAllUsersSuccess = (data) => ({
+export const fetchLogoutSuccess = (data) => ({
+  type: userTypes.LOGOUT_SUCCESS,
+  payload: {
+      data: data
+  }
+});
+
+export const fetchLogoutFailed = (error) => ({
+  type: userTypes.LOGOUT_FAILED,
+  payload: {
+      error
+  }
+});
+
+export const fetchAllUsersStart = (userId) => ({
+    type: userTypes.FETCH_ALL_USERS_START,
+    payload: userId
+});
+
+export const fetchAllUsersSuccess = ({ currentUser, users }) => ({
     type: userTypes.FETCH_ALL_USERS_SUCCESS,
     payload: {
-        data: data
+        currentUser,
+        users
     }
 });
 
@@ -84,3 +105,4 @@ export const fetchSetAvatarFailed = (error) => ({
       error
   }
 });
+

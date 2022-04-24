@@ -8,8 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/APIRoutes";
 import { toastOptions } from "../utils/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchSetAvatarStart } from "../actions/user";
+import { isEmpty } from "lodash";
 export default function SetAvatar() {
   const api = `https://api.multiavatar.com/4645646`;
   const navigate = useNavigate();
@@ -18,10 +19,16 @@ export default function SetAvatar() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState(undefined);
 
+  const { user } = useSelector(state => state.user);
+  const userData = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY) && JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
+
+
   useEffect(async () => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
+
+
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
@@ -31,8 +38,6 @@ export default function SetAvatar() {
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
 
-        console.log('avatars: ', avatars)
-        console.log('selectedAvatar: ', selectedAvatar)
       // const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
       //   image: avatars[selectedAvatar],
       // });
@@ -49,7 +54,6 @@ export default function SetAvatar() {
       //     process.env.REACT_APP_LOCALHOST_KEY,
       //     JSON.stringify(user)
       //   );
-        navigate("/");
       // } else {
       //   toast.error("Error setting avatar. Please try again.", toastOptions);
       // }
@@ -68,6 +72,13 @@ export default function SetAvatar() {
     setAvatars(data);
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if(!isEmpty(userData) && userData.isAvatarImageSet){
+      navigate('/')
+    }
+  }, [userData]);
+  
   return (
     <>
       {isLoading ? (

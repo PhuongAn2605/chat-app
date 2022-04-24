@@ -1,22 +1,41 @@
+import isEmpty from "is-empty";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { fetchAllUsersStart } from "../actions/user";
 import Logo from "../assets/logo.png"
 
-const Contact = ({ contacts, currentUser }) => {
-  console.log('currentUser: ', currentUser);
-  console.log('contacts: ', contacts)
-
-    const [currentUserName, setCurrentUserName] = useState(currentUser.username && currentUser.username);
-    const [currentUserImage, setCurrentUserImage] = useState(currentUser.avatarImage && currentUser.avatarImage);
+const Contact = ({ currentChat, handleChangeChat }) => {
+  const { user, userList, loggedOut } = useSelector(state => state.user);
+  const userData = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
+  console.log('userData: ', userData)
+    const [currentUserName, setCurrentUserName] = useState(userData && userData.username);
+    const [currentUserImage, setCurrentUserImage] = useState(userData && userData.avatarImage);
     const [currentSelected, setCurrentSelected] = useState(undefined);
 
-    const changeCurrentTask = (index, contact) => {
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+      if(!isEmpty(user) && !loggedOut){
+        dispatch(fetchAllUsersStart(user._id));
+      }else if(!isEmpty(userData) && !loggedOut){
+        dispatch(fetchAllUsersStart(userData._id));
+      }
+    }, []);
+    useEffect(() => {
+      setCurrentUserName(user && user.username);
+      setCurrentUserImage(user && user.avatarImage);
+    }, [user && user]);
+
+    const handleChangeCurrentChat = (index, contact) => {
+      setCurrentSelected(index);
+      handleChangeChat(contact);
     }
+
 
     return <>
     {
-        currentUserImage && currentUserName && (
+        currentUserImage && currentUserName && userList && (
                     <Container>
                         <div className="brand">
                             <img src={Logo} alt="logo" />
@@ -24,14 +43,14 @@ const Contact = ({ contacts, currentUser }) => {
                         </div>
                         <div className="contacts">
                             {
-                                contacts.map((contact, index) => {
+                                userList.map((contact, index) => {
                                     return (
-                                        <div key={contact._id} className={`contact ${index === currentSelected ? "selected" : ""}`}>
+                                        <div key={contact._id} className={`contact ${index === currentSelected ? "selected" : ""}`}  onClick={() => handleChangeCurrentChat(index, contact)}>
                                             <div className="avatar">
                                                 <img src={`data:image/svg+xml;base64,${contact.avatarImage}`} alt="avatar" />
                                             </div>
                                             <div className="username">
-                                                <h3>{contact.username}</h3>
+                                                <h3>{currentUserName === contact.username ? 'You' : contact.username}</h3>
                                             </div>
                                         </div>
                                         )

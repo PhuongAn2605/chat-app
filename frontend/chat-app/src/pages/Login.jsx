@@ -6,7 +6,7 @@ import Logo from "../assets/logo.png";
 import { toast, ToastContainer } from "react-toastify";
 import { loginRoute } from "../utils/APIRoutes";
 import { useDispatch } from "react-redux";
-import { fetchLoginStart } from "../actions/user";
+import { fetchLoginStart, naviagteToChat } from "../actions/user";
 import { useSelector } from "react-redux";
 import { toastOptions } from "../utils/toast";
 import isEmpty from "is-empty";
@@ -14,35 +14,40 @@ import isEmpty from "is-empty";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { error } = useSelector(state => state.user)
+    const { error, user } = useSelector(state => state.user);
 
     const [values, setValues] = useState({
         username: "",
-        email: "",
         password: "",
-        confirmPassword: ""
     });
 
     useEffect(() => {
-        if(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)){
+        if(!isEmpty(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))){
+          console.log('test 1');
             navigate('/');
         }
     }, []);
 
     const handleSubmit = async (event) => {
+      handleValidation();
+
         event.preventDefault();
+
         if (handleValidation()) {
             const { password, username } = values;
             dispatch(fetchLoginStart(username, password));
+            navigate('/');
 
         }
-        console.log('navigate: ', navigate)
-        navigate('/');
-
-        // if(!isEmpty(error)) {
-        //     navigate('/');
-        // }
+        // dispatch(naviagteToChat(navigate));
+  
     }
+    useEffect(() => {
+      if(!isEmpty(user)){
+        navigate('/');
+      }
+    }, [user, navigate])
+
     const handleValidation = () => {
         const { password, username } = values;
         if (password === "") {
@@ -57,7 +62,6 @@ const Login = () => {
     }
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
-        handleValidation();
     }
     return <>
         <FormContainerLogin>

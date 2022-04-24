@@ -1,31 +1,59 @@
 import * as userConstants from '../constants/user';
+import { setLocalDataUser } from '../utils/storage';
 
 const initialState = {
     user: {},
     error: null,
-    userList: []
+    userList: null,
+    loggedOut: false
 }
 
 const userReducer = (state = initialState, action ) => {
     switch(action.type) {
+      case userConstants.REGISTER_START:
+            return {
+                ...state,
+                error: null,
+                loggedOut: false
+            }
         case userConstants.REGISTER_SUCCESS:
             const { user } = action.payload;
             return {
                 ...state,
-                user
+                user,
+                loggedOut: false
             }
         case userConstants.REGISTER_FAILED:
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
             }
+        case userConstants.LOGIN_START:
+          return {
+              ...state,
+              error: null,
+          }
         case userConstants.LOGIN_SUCCESS:
-            const { userLogin } = action.payload;
+            const userLogin = action.payload.data;
             return {
                 ...state,
-                user: userLogin
+                user: userLogin,
+                loggedOut: false
             }
         case userConstants.LOGIN_FAILED:
+            return {
+                ...state,
+                error: action.payload
+            }
+        case userConstants.LOGOUT_SUCCESS:
+        case userConstants.LOGOUT_START:
+          return {
+              ...state,
+              user: null,
+              userList: null,
+              loggedOut: true,
+          }
+        case userConstants.LOGOUT_FAILED:
             return {
                 ...state,
                 error: action.payload
@@ -33,7 +61,8 @@ const userReducer = (state = initialState, action ) => {
         case userConstants.FETCH_ALL_USERS_SUCCESS:
             return {
                 ...state,
-                userList: action.payload.users
+                userList: action.payload.users,
+                user: action.payload.currentUser
             }
         case userConstants.FETCH_ALL_USERS_FAILED:
             return {
@@ -42,12 +71,10 @@ const userReducer = (state = initialState, action ) => {
             }
 
         case userConstants.FETCH_SET_AVATAR_SUCCESS:
-          console.log('payload: ', action.payload)
-          const { userData } = action.payload;
-            localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(userData))
+            setLocalDataUser(action.payload.data);
             return {
                 ...state,
-                user: userData
+                user: action.payload.data
             }
         case userConstants.FETCH_SET_AVATAR_FAILED:
             return {

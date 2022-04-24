@@ -47,20 +47,18 @@ module.exports.login = async (req, res, next) => {
 }
 
 module.exports.setAvatar = async (req, res, next) => {
-  console.log(req.body)
     try{ 
         const userId = req.body.userId;
         const avatarImage = req.body.image;
-        console.log('userId: ', userId)
-        const userData = await User.findByIdAndUpdate(userId, {
+        const user = await User.findByIdAndUpdate(userId, {
             isAvatarImageSet: true,
             avatarImage,
         });
-        console.log('userData: ', userData)
-        if(isEmpty(userData)) {
+        if(isEmpty(user)) {
           return res.json({ msg: "Something went wrong", status: false })
         }
-        return res.json(userData);
+        const updatedUser = await User.findById(userId);
+        return res.json({status: true, user: updatedUser });
         // return res.json({
         //     isSet: userData.isAvatarImageSet,
         //     image: userData.avatarImage,
@@ -74,14 +72,26 @@ module.exports.setAvatar = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
     try{ 
-        // const users = await User.find({_id: { $ne: req.params.id }}).select(["email", "username","avatarImage","_id"]);
+      const userId = req.body.userId;
+      const user = await User.findById(userId);
         const users = await User.find({});
-        if(isEmpty(users)) {
+        if(isEmpty(users) || isEmpty(user)) {
           return res.json({ msg: "Something went wrong!", status: false })
         }
-        return res.json({status: true, users});
+        return res.json({status: true, users, user});
     }catch(e) {
         next(e)
     }
     
+}
+
+module.exports.logout = (req, res, next) => {
+  try {
+    if(isEmpty(req.body.userId)) {
+      return res.json({ msg: 'User id is required!'});
+    }
+    return res.status(200).send();
+  }catch(ex){
+    next(ex);
+  }
 }
