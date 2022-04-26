@@ -83,7 +83,7 @@ const Chat = () => {
             <div className="left-items">
               <Logout />
               { isEmpty(currentChat) ? <Welcome currentUser={!isEmpty(user) ? user : userData} />
-              : <ChatContainer currentChat={currentChat} /> }
+              : <ChatContainer currentChat={currentChat} currentUser={!isEmpty(user) ? user : userData} /> }
             </div>
         </div>
     </Container>

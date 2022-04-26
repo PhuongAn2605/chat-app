@@ -1,9 +1,26 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import styled from "styled-components";
+import { fetchAllMessagesStart } from "../actions/message";
 import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 
-const ChatContainer = ({ currentChat }) => {
+const ChatContainer = ({ currentChat, currentUser }) => {
+  // const [messages, setMessages] = useState([]);
+  const { messages } = useSelector(state => state.message);
+
+  const dispatch = useDispatch();
+  useEffect(async () => {
+    dispatch(fetchAllMessagesStart({
+      from: currentUser._id,
+      to: currentChat._id
+    }));
+  }, [currentChat]);
+
+  const handleSendMsg = async (msg) => {
+
+  }
   return (
     <Container>
       <div className="chat-header">
@@ -19,9 +36,21 @@ const ChatContainer = ({ currentChat }) => {
         </div>
       </div>
       <div className="chat-messages">
-        <Messages />
+        {
+          messages && messages.map(message => {
+            return (
+              <div >
+                <div className={`message ${message.fromSelf ? "sended" : "received"}`}>
+                  <div>
+                    <p>{message.message}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        }
       </div>
-      <ChatInput />
+      <ChatInput handleSendMsg={handleSendMsg} />
     </Container>
   )
 }
@@ -81,6 +110,18 @@ const Container = styled.div`
         color: #d1d1d1;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
+        }
+      }
+      .sended {
+        justify-content: flex-end;
+        .content {
+          background-color: #4f04ff21;
+        }
+      }
+      .received {
+        justify-content: flex-start;
+        .content {
+          background-color: #9900ff20;
         }
       }
     }

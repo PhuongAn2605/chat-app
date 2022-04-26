@@ -3,10 +3,14 @@ import styled from 'styled-components';
 import Picker from 'emoji-picker-react';
 import { IoMdSend } from 'react-icons/io';
 import { BsEmojiSmileFill } from 'react-icons/bs';
+import { isEmpty } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { fetchSendMessageStart } from '../actions/message';
 
-const ChatInput = () => {
+const ChatInput = ({ handleSendMsg }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [msg, setMsg] = useState('');
+  const dispatch = useDispatch();
 
   const handleShowEmojiPicker = () => {
     setShowEmojiPicker(!showEmojiPicker);
@@ -15,12 +19,24 @@ const ChatInput = () => {
   const handleEmojiClick = (event, emoji) => {
     let message = msg;
     message += emoji.emoji;
+    handleSendMsg(msg);
     setMsg(message);
 
   }
 
+  const sendChat = (event) => {
+    console.log('event: ', event)
+    event.preventDefault();
+    // dispatch(fetchSendMessageStart({
+    //   from:  
+    // }))
+    if(!isEmpty(msg)){
+      setMsg('');
+    }
+  }
+
   return <Container>
-    <div className="button-container">
+    <div className="button-container"  onSubmit={(e)=> sendChat(e)}>
       <div className="emoji">
         <BsEmojiSmileFill onClick={handleShowEmojiPicker} />
         { showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
@@ -79,6 +95,13 @@ const Container = styled.div`
             filter: contrast(0);
           }
         }
+        .emoji-search {
+          background-color: transparent;
+          border-color: #9186f3;
+        }
+        .emoji-group:before {
+          background-color: #080420;
+        } 
       }
     }
   }
