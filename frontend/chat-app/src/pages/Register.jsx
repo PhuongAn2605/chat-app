@@ -66,6 +66,9 @@ export default function Register() {
     if (handleValidation()) {
       const { email, username, password } = values;
       dispatch(fetchRegisterStart( username, email, password ));
+    } 
+    else {
+      toast.error('Invalid data!', toastOptions);
     }
     if(!error) {
       navigate('/');
