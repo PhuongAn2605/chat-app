@@ -1,6 +1,6 @@
 import * as messageTypes from "../constants/message";
 
-export const fetchSendMessageStart = ( from, to, message ) => ({
+export const fetchSendMessageStart = ( { from, to, message } ) => ({
     type: messageTypes.SEND_MESSAGE_START,
     payload: {
         from,
@@ -23,12 +23,11 @@ export const fetchSendMessageFailed = (error) => ({
     }
 });
 
-export const fetchAllMessagesStart = ( from, to, message ) => ({
+export const fetchAllMessagesStart = ( { from, to } ) => ({
     type: messageTypes.FETCH_ALL_MESSAGES_START,
     payload: {
         from,
         to,
-        message
     }
 });
 

@@ -16,7 +16,7 @@ const messageReducer = (state=initialState, action) => {
         case messageConstants.SEND_MESSAGE_SUCCESS:
             return {
                 ...state,
-                currentChat: action.payload,
+                currentChat: action.payload.data.currentUser,
                 error: null
             }
         case messageConstants.SEND_MESSAGE_FAILED:
@@ -30,9 +30,10 @@ const messageReducer = (state=initialState, action) => {
                 messages: null
             }
         case messageConstants.FETCH_ALL_MESSAGES_SUCCESS:
+            console.log('FETCH_ALL_MESSAGES_SUCCESS: ', action.payload)
             return {
                 ...state,
-                messages: action.payload,
+                messages: action.payload.data.projectMessages,
                 error: null
             }
         case messageConstants.FETCH_ALL_MESSAGES_FAILED:

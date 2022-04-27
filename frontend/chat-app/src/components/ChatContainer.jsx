@@ -2,25 +2,42 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import styled from "styled-components";
-import { fetchAllMessagesStart } from "../actions/message";
+import { fetchAllMessagesStart, fetchSendMessageStart } from "../actions/message";
 import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 
 const ChatContainer = ({ currentChat, currentUser }) => {
   // const [messages, setMessages] = useState([]);
   const { messages } = useSelector(state => state.message);
+  console.log('messages: ', messages)
 
   const dispatch = useDispatch();
   useEffect(async () => {
+    const data = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
     dispatch(fetchAllMessagesStart({
-      from: currentUser._id,
+      from: data._id,
       to: currentChat._id
     }));
   }, [currentChat]);
 
-  const handleSendMsg = async (msg) => {
+  useEffect(() => {
+    const getCurrentChat = async () => {
+      if(currentChat) {
+        await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))._id;
+      }
+    };
+    getCurrentChat();
+  }, [currentChat]);
 
+  const handleSendMsg = async (msg) => {
+    const data = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
+    dispatch(fetchSendMessageStart({
+      from: data._id,
+      to: currentChat._id,
+      message: msg
+    }));
   }
+
   return (
     <Container>
       <div className="chat-header">
@@ -41,7 +58,7 @@ const ChatContainer = ({ currentChat, currentUser }) => {
             return (
               <div >
                 <div className={`message ${message.fromSelf ? "sended" : "received"}`}>
-                  <div>
+                  <div className="content">
                     <p>{message.message}</p>
                   </div>
                 </div>
@@ -112,17 +129,17 @@ const Container = styled.div`
           max-width: 70%;
         }
       }
-      .sended {
+    }
+    .sended {
         justify-content: flex-end;
         .content {
           background-color: #4f04ff21;
         }
       }
-      .received {
-        justify-content: flex-start;
-        .content {
-          background-color: #9900ff20;
-        }
+    .received {
+      justify-content: flex-start;
+      .content {
+        background-color: #9900ff20;
       }
     }
   }

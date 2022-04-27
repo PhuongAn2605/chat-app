@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,8 +12,10 @@ import isEmpty from "is-empty";
 import Logout from "../components/Logout";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
+import { io } from 'socket.io-client';
 
 const Chat = () => {
+    const socket = useRef();
     const [contacts, setContacts] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,9 +50,7 @@ const Chat = () => {
     }, [loggedOut]);
 
     useEffect(() => {
-      console.log('1')
         if (isEmpty(userData)) {
-          console.log('test 3')
           navigate("/login");
         } else {
           setCurrentUser(userData);
@@ -63,7 +63,6 @@ const Chat = () => {
     }, []);
 
     const handleChangeChat = (chat) => {
-      console.log('chat')
       setCurrentChat(chat);
     }
 

@@ -9,9 +9,9 @@ module.exports.addMessage = async (req, res, next) => {
             sender: from
         });
         if(data) {
-            return res.json({ msg: "Message added successfully!"});
+            return res.json({ msg: "Message added successfully!", status: true, currentUser: to });
         }
-        return res.json({ msg: "Failed to add messsage to the database!"});
+        return res.json({ msg: "Failed to add messsage to the database!", status: false });
     }catch(ex) {
         next(ex);
     }
@@ -31,7 +31,7 @@ module.exports.getAllMessages = async (req, res, next) => {
                 message: msg.message.text
             }
         });
-        res.json(projectMessages);
+        res.json({ projectMessages, status: true });
     }catch(e) {
         next(e);
     }
