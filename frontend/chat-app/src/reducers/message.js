@@ -30,7 +30,6 @@ const messageReducer = (state=initialState, action) => {
                 messages: null
             }
         case messageConstants.FETCH_ALL_MESSAGES_SUCCESS:
-            console.log('FETCH_ALL_MESSAGES_SUCCESS: ', action.payload)
             return {
                 ...state,
                 messages: action.payload.data.projectMessages,

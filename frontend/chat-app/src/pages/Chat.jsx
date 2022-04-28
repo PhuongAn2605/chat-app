@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { allUsersRoute, registerRoute } from "../utils/APIRoutes";
+import { allUsersRoute, host, registerRoute } from "../utils/APIRoutes";
 import Contact from "../components/Contact";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsersStart } from "../actions/user";
@@ -34,7 +34,6 @@ const Chat = () => {
 
     const userData = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY) && JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
 
-    console.log('test: ', userData)
     // useEffect(() => {
     //   setCurrentUser(user);
     // },[user])
@@ -62,6 +61,13 @@ const Chat = () => {
       }
     }, []);
 
+    useEffect(() => {
+      if(currentUser){
+        socket.current = io(host);
+        socket.current.emit("add-user", currentUser._id);
+      }
+    },[currentUser]);
+
     const handleChangeChat = (chat) => {
       setCurrentChat(chat);
     }
@@ -82,7 +88,7 @@ const Chat = () => {
             <div className="left-items">
               <Logout />
               { isEmpty(currentChat) ? <Welcome currentUser={!isEmpty(user) ? user : userData} />
-              : <ChatContainer currentChat={currentChat} currentUser={!isEmpty(user) ? user : userData} /> }
+              : <ChatContainer currentChat={currentChat} currentUser={!isEmpty(user) ? user : userData} socket={socket} /> }
             </div>
         </div>
     </Container>

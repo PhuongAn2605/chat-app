@@ -23,7 +23,6 @@ const Login = () => {
 
     useEffect(() => {
         if(!isEmpty(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))){
-          console.log('test 1');
             navigate('/');
         }
     }, []);

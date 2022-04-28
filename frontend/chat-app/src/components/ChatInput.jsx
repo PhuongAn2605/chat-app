@@ -23,7 +23,6 @@ const ChatInput = ({ handleSendMsg }) => {
   }
 
   const sendChat = (event) => {
-    console.log('event: ', event)
     event.preventDefault();
     // dispatch(fetchSendMessageStart({
     //   from:  

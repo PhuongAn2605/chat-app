@@ -21,7 +21,6 @@ const Logout = () => {
 
   useEffect(() => {
     if(isLoggedOut){
-      console.log('test 2')
       navigate('/login');
     }
   }, [isLoggedOut]);

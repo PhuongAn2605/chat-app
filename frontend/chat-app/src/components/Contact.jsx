@@ -8,7 +8,6 @@ import Logo from "../assets/logo.png"
 const Contact = ({ currentChat, handleChangeChat }) => {
   const { user, userList, loggedOut } = useSelector(state => state.user);
   const userData = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
-  console.log('userData: ', userData)
     const [currentUserName, setCurrentUserName] = useState(userData && userData.username);
     const [currentUserImage, setCurrentUserImage] = useState(userData && userData.avatarImage);
     const [currentSelected, setCurrentSelected] = useState(undefined);
