@@ -30,7 +30,7 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
     };
     getCurrentChat();
     setCurrentMessages(messages);
-  }, [currentChat]);
+  }, [currentChat, messages]);
 
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
@@ -45,7 +45,7 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
       msg,
     });
 
-    const msgs = [...messages];
+    const msgs = [...currentMessages];
     msgs.push({
       fromSelf: true,
       message: msg
@@ -134,6 +134,7 @@ const Container = styled.div`
   }
   .chat-messages {
     padding: 1rem 2rem;
+    height: 80%;
     display: flex;
     flex-direction: column;
     gap: 1rem;

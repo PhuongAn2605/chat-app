@@ -117,6 +117,7 @@ const Container = styled.div`
     .left-items {
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
 `;

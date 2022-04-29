@@ -56,7 +56,7 @@ const Container = styled.div`
   background-color: #080420;
   padding: 0 2rem;
   position: absolute;
-  bottom: 5rem;
+  bottom: 3rem;
   width: 50%;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;
