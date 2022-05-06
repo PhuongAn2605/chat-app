@@ -24,10 +24,11 @@ module.exports.getAllMessages = async (req, res, next) => {
             users: {
                 $all: [from, to]
             }
+            // users: [from, to]
         }).sort({ updateAt: 1 });
         const projectMessages = messages.map((msg) => {
             return {
-                fromSelf: msg.sender.toString() === true,
+                fromSelf: msg.sender.toString() === from,
                 message: msg.message.text
             }
         });

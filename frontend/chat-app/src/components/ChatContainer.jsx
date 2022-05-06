@@ -2,18 +2,30 @@ import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import styled from "styled-components";
+import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import { fetchAllMessagesStart, fetchSendMessageStart } from "../actions/message";
 import ChatInput from "./ChatInput";
 import { v4 as uuidv4 } from "uuid";
 import Messages from "./Messages";
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import VideoCallDialog from "./VideoCallDialog";
+
 const ChatContainer = ({ currentChat, currentUser, socket }) => {
   const [currentMessages, setCurrentMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [openVideo, setOpenVideo] = useState(false);
+
   const scrollRef = useRef();
   const { messages } = useSelector(state => state.message);
 
   const dispatch = useDispatch();
+
   useEffect(async () => {
     const data = await JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
     dispatch(fetchAllMessagesStart({
@@ -69,6 +81,10 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   },[currentMessages]);
 
+  const handleClose = () => {
+    setOpenVideo(false);
+  }
+
   return (
     <Container>
       <div className="chat-header">
@@ -79,8 +95,11 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
             />
           </div>
           <div className="username">
-            <h3>{currentChat.username}</h3>
+            <h3>{currentChat._id === currentUser._id ? 'You' : currentChat.username}</h3>
           </div>
+        </div>
+        <div className="call-functions">
+          <VideoCameraBackIcon color='info' fontSize="large" onClick={() => setOpenVideo(true)} />
         </div>
       </div>
       <div className="chat-messages">
@@ -99,6 +118,11 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
         }
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />
+      <VideoCallDialog 
+        openVideo={openVideo}
+        handleClose={handleClose}
+        currentUser={currentUser}
+      />
     </Container>
   )
 }
@@ -114,12 +138,16 @@ const Container = styled.div`
   .chat-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     padding: 0 2rem;
+    /* margin-top: 2rem;
+    background-color: #aaa; */
+    /* margin-top: 14rem; */
     .user-details {
       display: flex;
       align-items: center;
       gap: 1rem;
+      margin-top: 3rem;
       .avatar {
         img {
           height: 3rem;
@@ -129,6 +157,16 @@ const Container = styled.div`
         h3 {
           color: #fff;
         }
+      }
+      .call-functions {
+        /* display: flex; */
+        /* justify-content: flex-end !important;
+        align-items: flex-end; */
+        /* margin-left: auto; */
+        display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 3rem;
       }
     }
   }

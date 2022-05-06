@@ -47,5 +47,13 @@ io.on('connection', socket => {
         if(sendUserSocket) {
             socket.to(sendUserSocket).emit('msg-recieve', data.msg);
         }
+    });
+
+    socket.on('disconnect', () => {
+        socket.broadcast.emit("callEnded");
+    })
+
+    socket.on("callUser", (data) => {
+        io.to(data.userToCall).emit("callUser", { signal: data.signal, from: data.from, name: data.name })
     })
 })
