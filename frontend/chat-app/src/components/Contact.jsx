@@ -11,7 +11,10 @@ const Contact = ({ currentChat, handleChangeChat }) => {
     const [currentUserName, setCurrentUserName] = useState(userData && userData.username);
     const [currentUserImage, setCurrentUserImage] = useState(userData && userData.avatarImage);
     const [currentSelected, setCurrentSelected] = useState(undefined);
+    let userListClone = null;
 
+    console.log('userList: ', userList);
+    console.log('user: ', user);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -21,6 +24,24 @@ const Contact = ({ currentChat, handleChangeChat }) => {
         dispatch(fetchAllUsersStart(userData._id));
       }
     }, []);
+
+    let filteredUserList;
+    let targetIndex;
+
+    useEffect(() => {
+      if(!isEmpty(userList)){
+        userListClone = [...userList];
+        const targetedUser = userListClone.find(u => u.id === user.id);
+        targetIndex = userListClone.indexOf(targetedUser);
+
+        filteredUserList = userList.filter(u => u._id !== user._id);
+        
+      }
+
+    }, [userList && userList]);
+
+    console.log('userListClone: ', userListClone)
+    
     useEffect(() => {
       setCurrentUserName(user && user.username);
       setCurrentUserImage(user && user.avatarImage);
@@ -44,24 +65,26 @@ const Contact = ({ currentChat, handleChangeChat }) => {
                             {
                                 userList.map((contact, index) => {
                                     return (
-                                        <div key={contact._id} className={`contact ${index === currentSelected ? "selected" : ""}`}  onClick={() => handleChangeCurrentChat(index, contact)}>
+                                        <div key={contact._id}>
+                                          { contact._id !== user._id && <div key={contact._id} className={`contact ${index === currentSelected ? "selected" : ""}`}  onClick={() => handleChangeCurrentChat(index, contact)}>
                                             <div className="avatar">
                                                 <img src={`data:image/svg+xml;base64,${contact.avatarImage}`} alt="avatar" />
                                             </div>
                                             <div className="username">
-                                                <h3>{currentUserName === contact.username ? 'You' : contact.username}</h3>
+                                                <h3>{contact.username}</h3>
                                             </div>
+                                          </div>}
                                         </div>
                                         )
                                 })
                             }
                         </div>
-                        <div className="current-user">
+                        <div className="current-user" onClick={() => handleChangeCurrentChat(targetIndex, user)}>
                             <div className="avatar">
                                 <img src={`data:image/svg+xml;base64,${currentUserImage}`} alt="avatar" />
                             </div>
                             <div className="username">
-                                <h2>{currentUserName}</h2>
+                                <h2>You ({currentUserName})</h2>
                             </div>
                         </div>
                     </Container>
@@ -106,9 +129,9 @@ const Container = styled.div`
       background-color: #ffffff34;
       min-height: 5rem;
       cursor: pointer;
-      width: 90%;
+      width: 100%;
       border-radius: 0.2rem;
-      padding: 0.4rem;
+      padding: 0.4rem 2rem;
       display: flex;
       gap: 1rem;
       align-items: center;
