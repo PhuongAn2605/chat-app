@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import styled from "styled-components";
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
-import { fetchAllMessagesStart, fetchSendMessageStart } from "../actions/message";
+import { fetchAllMessagesStart, fetchSendMessageStart, toggleVideoDialog } from "../actions/message";
 import ChatInput from "./ChatInput";
 import { v4 as uuidv4 } from "uuid";
 import Messages from "./Messages";
@@ -15,6 +15,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import VideoCallDialog from "./VideoCallDialog";
+import Peer from "simple-peer";
+import PhoneIcon from "@material-ui/icons/Phone";
+import { IconButton, TextField } from '@mui/material';
+
+
+
 
 const ChatContainer = ({ currentChat, currentUser, socket }) => {
   const [currentMessages, setCurrentMessages] = useState([]);
@@ -22,7 +28,7 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
   const [openVideo, setOpenVideo] = useState(false);
 
   const scrollRef = useRef();
-  const { messages } = useSelector(state => state.message);
+  const { messages, openVideoDialog } = useSelector(state => state.message);
 
   const dispatch = useDispatch();
 
@@ -82,8 +88,9 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
   },[currentMessages]);
 
   const handleClose = () => {
-    setOpenVideo(false);
+    dispatch(toggleVideoDialog(false));
   }
+
 
   return (
     <Container>
@@ -99,7 +106,7 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
           </div>
         </div>
         <div className="call-functions">
-          <VideoCameraBackIcon color='info' fontSize="large" onClick={() => setOpenVideo(true)} />
+          <VideoCameraBackIcon color='info' fontSize="large" onClick={() => dispatch(toggleVideoDialog(true))} />
         </div>
       </div>
       <div className="chat-messages">
@@ -119,9 +126,10 @@ const ChatContainer = ({ currentChat, currentUser, socket }) => {
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />
       <VideoCallDialog 
-        openVideo={openVideo}
+        openVideo={openVideoDialog}
         handleClose={handleClose}
         currentUser={currentUser}
+        currentChat={currentChat}
       />
     </Container>
   )

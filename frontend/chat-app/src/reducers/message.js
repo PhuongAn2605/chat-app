@@ -3,7 +3,8 @@ import * as messageConstants from '../constants/message';
 const initialState = {
     currentChat: null,
     error: null,
-    messages: null
+    messages: null,
+    openVideoDialog: false
 }
 
 const messageReducer = (state=initialState, action) => {
@@ -40,6 +41,11 @@ const messageReducer = (state=initialState, action) => {
                 ...state,
                 error: action.payload
             }
+        case messageConstants.TOGGLE_VIDEO_DIALOG:
+          return {
+            ...state,
+            openVideoDialog: action.payload.openVideoDialog
+          }
         default:
             return state;
     }

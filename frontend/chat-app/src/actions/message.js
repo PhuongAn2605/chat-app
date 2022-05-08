@@ -44,3 +44,10 @@ export const fetchAllMessagesFailed = (error) => ({
         error
     }
 });
+
+export const toggleVideoDialog = (openVideo) => ({
+  type: messageTypes.TOGGLE_VIDEO_DIALOG,
+  payload: {
+      openVideoDialog: openVideo
+  }
+});

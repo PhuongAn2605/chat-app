@@ -13,8 +13,6 @@ const Contact = ({ currentChat, handleChangeChat }) => {
     const [currentSelected, setCurrentSelected] = useState(undefined);
     let userListClone = null;
 
-    console.log('userList: ', userList);
-    console.log('user: ', user);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,8 +38,6 @@ const Contact = ({ currentChat, handleChangeChat }) => {
 
     }, [userList && userList]);
 
-    console.log('userListClone: ', userListClone)
-    
     useEffect(() => {
       setCurrentUserName(user && user.username);
       setCurrentUserImage(user && user.avatarImage);

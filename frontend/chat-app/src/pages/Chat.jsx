@@ -13,6 +13,7 @@ import Logout from "../components/Logout";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 import { io } from 'socket.io-client';
+import VideoCallDialog from "../components/VideoCallDialog";
 
 const Chat = () => {
     const socket = useRef();
@@ -91,6 +92,7 @@ const Chat = () => {
               : <ChatContainer currentChat={currentChat} currentUser={!isEmpty(user) ? user : userData} socket={socket} /> }
             </div>
         </div>
+        
     </Container>
 
 }
